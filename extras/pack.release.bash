@@ -1,4 +1,4 @@
-#!/bin/bash -ex
+#!/bin/bash
 
 #  pack.*.bash - Bash script to help packaging samd core releases.
 #  Copyright (c) 2015 Arduino LLC.  All right reserved.
@@ -17,17 +17,76 @@
 #  License along with this library; if not, write to the Free Software
 #  Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 
-VERSION=`grep version= platform.txt | sed 's/version=//g'`
+set -euo pipefail
+IFS=$'\n\t'
 
-PWD=`pwd`
-FOLDERNAME=`basename $PWD`
-THIS_SCRIPT_NAME=`basename $0`
+# check if needed tools are installed
+jq --version >/dev/null 2>&1 || { echo >&2 "This script requires jq but it's not installed.  Aborting."; exit 1; }
+curl --version >/dev/null 2>&1 || { echo >&2 "This script requires curl but it's not installed.  Aborting."; exit 1; }
+tar --version >/dev/null 2>&1 || { echo >&2 "This script requires tar but it's not installed.  Aborting."; exit 1; }
 
-rm -f samd-$VERSION.tar.bz2
+VERSION=$(grep version= platform.txt | sed 's/version=//g')
 
-cd ..
-tar --transform "s|$FOLDERNAME|$FOLDERNAME-$VERSION|g"  --exclude=extras/** --exclude=.git* --exclude=.idea -cjf samd-$VERSION.tar.bz2 $FOLDERNAME
-cd -
+PWD=$(pwd)
+FOLDERNAME=$(basename "$PWD")
+FILENAME="arduino-senseBoxCore-$VERSION.tar.bz2"
+OUTPUTNAME="packages/$FILENAME"
+INPUTNAME=$(dirname "$PWD")
 
-mv ../samd-$VERSION.tar.bz2 .
+# These variables hold references to the original Arduino boards package we are
+# based on
+ARDUINOBOARDPACKAGEURL="https://downloads.arduino.cc/packages/package_index.json"
+ARDUINOBOARDPACKAGENAME="Arduino SAMD Boards (32-bits ARM Cortex-M0+)"
+ARDUINOBOARDPACKAGEVERSION="1.6.16"
+
+# wrap in functions to ensure script can be loaded correctly before executing anything
+createArchive () {
+  if [ -f "$OUTPUTNAME" ]; then
+    echo "Error:"
+    echo "File $OUTPUTNAME already exists. Please update the version in platform.txt to create a new version."
+    echo "Exiting ..."
+    exit
+  fi
+
+  echo -n "Creating tar archive $OUTPUTNAME ... "
+
+  tar -C "$INPUTNAME" --transform "s|$FOLDERNAME|$FOLDERNAME-$VERSION|g" --exclude=extras --exclude=.git* --exclude=.idea --exclude=packages --exclude package_sensebox_index.json -cjf "$OUTPUTNAME" "$FOLDERNAME"
+
+  echo "done"
+}
+
+updatePackageJson () {
+  echo "Updating package_sensebox_index.json ... "
+
+  echo -en "\tGetting toolsDependencies from upstream package ... "
+
+  TOOLSDEPENDENCIES=$(curl --silent -L "$ARDUINOBOARDPACKAGEURL" | jq -rMc --arg name "$ARDUINOBOARDPACKAGENAME" --arg version "$ARDUINOBOARDPACKAGEVERSION" -f extras/extract_toolsDependencies.jq)
+
+  echo "done"
+
+  echo -en "\tConstructing new platform ... "
+
+  # get filesize
+  FILESIZE=$(stat -c "%s" "$OUTPUTNAME")
+
+  # calculate checksum
+  CHECKSUM="SHA-256:$(shasum -a 256 "$OUTPUTNAME" | cut -d " " -f 1)"
+
+  NEWPLATFORM=$(jq -rMc --argjson toolsDeps "$TOOLSDEPENDENCIES" --arg version "$VERSION" --arg checksum "$CHECKSUM" --arg filesize "$FILESIZE" --arg filename "$FILENAME" -f extras/newPlatform.jq extras/platform.json.template)
+
+  echo "done"
+
+  echo -en "\tConstructing updated package_sensebox_index.json ... "
+
+  jq -rM --argjson newPlatform "$NEWPLATFORM" -f extras/update_package.jq package_sensebox_index.json > new_package.json
+  mv new_package.json package_sensebox_index.json
+
+  echo "done"
+
+  echo "done"
+}
+
+# call the functions
+createArchive
+updatePackageJson
 

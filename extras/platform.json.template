@@ -1,0 +1,19 @@
+{
+  "name": "senseBox Board Core",
+  "architecture": "samd",
+  "version": "",
+  "category": "contributed",
+  "help": {
+    "online": "https://github.com/sensebox/arduino-senseBoxCore"
+  },
+  "url": "https://sensebox.github.io/arduino-senseBoxCore/packages/",
+  "archiveFileName": "",
+  "size": "",
+  "checksum": "",
+  "boards": [
+    {
+      "name": "senseBox Board"
+    }
+  ],
+  "toolsDependencies": []
+}
