@@ -1,3 +1,30 @@
+# senseBox Arduino Core
+
+This repository contains the files required to compile Arduino sketches for the senseBox Board.
+
+To install the core in your Arduino IDE:
+  1. Open the **Preferences** of the Arduino IDE.
+  2. Add this URL `https://sensebox.github.io/arduino-senseBoxCore/package_sensebox_index.json` in the **Additional Boards Manager URLs** field, and click OK.
+  3. Open the **Boards Manager** (menu Tools->Board->Board Manager...)
+  4. Install **senseBox Board Core**
+  5. Select the **senseBox Board** board under **senseBox** in Tools->Board menu
+  6. Compile/Upload as usual
+
+Sources:
+https://downloads.arduino.cc/packages/package_index.json
+https://github.com/watterott/SAM-BAR
+
+
+## Changes made to the original Arduino Core for SAMD21 CPU
+- Extended the `extras/pack.release.bash` file to create and deploy JSON and package to Github pages
+- Replaced files in `bootloaders`, `drivers`and `variants` from with senseBox Board stuff from watterott/SAM-BAR
+- Added senseBoxIO library to `libraries`
+- Replaced `boards.txt` with senseBox Board definitions from watterott/SAM-BAR
+- Changed `version` and `name` fields in `platform.txt`
+
+Original Readme below
+---
+
 # Arduino Core for SAMD21 CPU
 
 This repository contains the source code and configuration files of the Arduino Core
@@ -27,7 +54,7 @@ to avoid duplicates.
 
 ## Contributions
 
-Contributions are always welcome. The preferred way to receive code cotribution is by submitting a 
+Contributions are always welcome. The preferred way to receive code cotribution is by submitting a
 Pull Request on github.
 
 ## Hourly builds

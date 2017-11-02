@@ -14,13 +14,16 @@
 # License along with this library; if not, write to the Free Software
 # Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 
-# Arduino SAMD Core and platform.
+# senseBox Board Core and platform
+# based on:
+# - Arduino SAMD Core and platform https://github.com/arduino/ArduinoCore-samd
+# - Watterott Board package https://github.com/watterott/SAM-BAR
 #
 # For more info:
 # https://github.com/arduino/Arduino/wiki/Arduino-IDE-1.5---3rd-party-Hardware-specification
 
-name=Arduino SAMD (32-bits ARM Cortex-M0+) Boards
-version=1.6.16
+name=senseBox Board Core
+version=1.0.0
 
 # Compile variables
 # -----------------
