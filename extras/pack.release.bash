@@ -37,7 +37,7 @@ INPUTNAME=$(dirname "$PWD")
 # based on
 ARDUINOBOARDPACKAGEURL="https://downloads.arduino.cc/packages/package_index.json"
 ARDUINOBOARDPACKAGENAME="Arduino SAMD Boards (32-bits ARM Cortex-M0+)"
-ARDUINOBOARDPACKAGEVERSION="1.6.16"
+ARDUINOBOARDPACKAGEVERSION="1.6.17"
 
 # wrap in functions to ensure script can be loaded correctly before executing anything
 createArchive () {
