@@ -1,26 +1,8 @@
-# Copyright (c) 2014-2015 Arduino LLC.  All right reserved.
-#
-# This library is free software; you can redistribute it and/or
-# modify it under the terms of the GNU Lesser General Public
-# License as published by the Free Software Foundation; either
-# version 2.1 of the License, or (at your option) any later version.
-#
-# This library is distributed in the hope that it will be useful,
-# but WITHOUT ANY WARRANTY; without even the implied warranty of
-# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
-# See the GNU Lesser General Public License for more details.
-#
-# You should have received a copy of the GNU Lesser General Public
-# License along with this library; if not, write to the Free Software
-# Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
-
-# senseBox Board Core and platform
+# senseBox MCU Board Core and platform
 # based on:
 # - Arduino SAMD Core and platform https://github.com/arduino/ArduinoCore-samd
-# - Watterott Board package https://github.com/watterott/SAM-BAR
-#
-# For more info:
-# https://github.com/arduino/Arduino/wiki/Arduino-IDE-1.5---3rd-party-Hardware-specification
+# - Watterott Board package https://github.com/watterott/SAM-BAR/tree/6785050
+# - Watterott SenseBox MCU package https://github.com/watterott/SenseBox-MCU
 
 name=senseBox Board Core
 version=1.0.0
@@ -144,12 +126,7 @@ tools.bossac.upload.pattern="{path}/{cmd}" {upload.verbose} --port={serial.port.
 
 tools.bossac_remote.upload.pattern=/usr/bin/run-bossac {upload.verbose} --port=ttyATH0 -U {upload.native_usb} -e -w -v /tmp/sketch.bin -R
 
-tools.bossac.network_cmd={runtime.tools.arduinoOTA.path}/bin/arduinoOTA
-tools.bossac.upload.network_pattern="{network_cmd}" -address {serial.port} -port 65280 -username arduino -password "{network.password}" -sketch "{build.path}/{build.project_name}.bin" -upload /sketch -b
-
-#
 # OpenOCD sketch upload
-#
 
 tools.openocd.path={runtime.tools.openocd-0.9.0-arduino6-static.path}
 tools.openocd.cmd=bin/openocd

@@ -1,7 +1,7 @@
 {
   "packages": [
     {
-      "name": "senseBox",
+      "name": "senseBox MCU",
       "maintainer": "senseBox",
       "websiteURL": "https://sensebox.de",
       "email": "",
@@ -10,7 +10,7 @@
       },
       "platforms": [
         {
-          "name": "senseBox Board Core",
+          "name": "senseBox MCU SAMD Board Core",
           "architecture": "samd",
           "version": "1.0.0",
           "category": "contributed",
@@ -23,7 +23,7 @@
           "checksum": "SHA-256:03fa0e97d15a6fdf9f6fac6a844c1e22ec1c9c0269f262e474e447a86e669a4d",
           "boards": [
             {
-              "name": "senseBox Board"
+              "name": "senseBox MCU"
             }
           ],
           "toolsDependencies": [
