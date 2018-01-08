@@ -1,7 +1,7 @@
 {
   "packages": [
     {
-      "name": "senseBox MCU",
+      "name": "senseBox",
       "maintainer": "senseBox",
       "websiteURL": "https://sensebox.de",
       "email": "",
