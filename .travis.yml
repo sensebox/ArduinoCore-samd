@@ -16,7 +16,7 @@ script:
   -f extras/replace_local_url.jq package_sensebox_index.json_original > package_sensebox_index.json
 - arduino --pref boardsmanager.additional.urls=$SENSEBOXCORE_URL --install-boards
   senseBox:samd:$SENSEBOXCORE_VERSION
-- arduino --verbose-build --verify --board senseBox:samd:sb "${TRAVIS_BUILD_DIR}/libraries/senseBox/examples/Blink/Blink.ino
+- arduino --verbose-build --verify --board senseBox:samd:sb "${TRAVIS_BUILD_DIR}/libraries/senseBox/examples/Blink/Blink.ino"
 before_deploy:
 - mkdir -p deploy
 - mv package_sensebox_index.json_original deploy/package_sensebox_index.json
