@@ -50,7 +50,7 @@ createArchive () {
 
   echo -n "Creating tar archive $OUTPUTNAME ... "
 
-  tar -C "$INPUTNAME" --transform "s|$FOLDERNAME|$FOLDERNAME-$VERSION|g" --exclude=extras --exclude=.git* --exclude=.idea --exclude=packages --exclude package_sensebox_index.json -cjf "$OUTPUTNAME" "$FOLDERNAME"
+  tar -C "$INPUTNAME" --transform "s|$FOLDERNAME|$FOLDERNAME-$VERSION|g" --exclude=extras --exclude=.git* --exclude=packages --exclude package_sensebox_index.json --exclude-from=.gitignore -cjf "$OUTPUTNAME" "$FOLDERNAME"
 
   echo "done"
 }
