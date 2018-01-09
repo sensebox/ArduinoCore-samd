@@ -5,7 +5,7 @@
 # - Watterott SenseBox MCU package https://github.com/watterott/SenseBox-MCU
 
 name=senseBox Board Core
-version=1.0.0
+version=1.0.1
 
 # Compile variables
 # -----------------
