@@ -1,5 +1,5 @@
 # build url
-(.url + $filename) as $url
+(.url + $version + "/" + $filename) as $url
 # assignments
 | .version = $version
 | .size = $filesize
