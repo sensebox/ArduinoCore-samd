@@ -1,5 +1,5 @@
 {
-  "name": "senseBox Board Core",
+  "name": "senseBox MCU SAMD Board Core",
   "architecture": "samd",
   "version": "",
   "category": "contributed",
@@ -12,7 +12,7 @@
   "checksum": "",
   "boards": [
     {
-      "name": "senseBox Board"
+      "name": "senseBox MCU"
     }
   ],
   "toolsDependencies": []
