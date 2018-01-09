@@ -1,0 +1,1 @@
+select(.packages[].version = "$version") | .packages[0].platforms[0].url = $url
