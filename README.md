@@ -26,6 +26,21 @@ To install the core in your Arduino IDE:
 * [Schematics + Layout](https://github.com/watterott/SenseBox-MCU/tree/master/hardware) (External link)
 * [Board Support Package for Arduino IDE](https://github.com/sensebox/arduino-senseBoxCore/)
 
+## Releasing a new version
+
+Make sure there isn't already a release with this version on Github! The release provider will not overwrite the release but force push the json resulting in different crc values of the actual archive file and in the json!
+
+1. Commit all of your changes
+1. Increase the version in `platform.txt`
+1. Try to build locally `./extras/pack.release.bash`
+1. Run `./extras/pack.release.bash commitAndTag`
+1. Run `git push origin <NEW_VERSION> master`
+1. Travis CI will take over to:
+    * Create the archive
+    * Try to compile a basic sketch
+    * Create a release containing the archive
+    * Update the `package_sensebox_index.json` on the `gh-pages` branch
+
 ## Sources
 
 [https://downloads.arduino.cc/packages/package_index.json](https://downloads.arduino.cc/packages/package_index.json)

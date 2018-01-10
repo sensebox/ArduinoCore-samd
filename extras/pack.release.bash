@@ -30,7 +30,8 @@ VERSION=$(grep version= platform.txt | sed 's/version=//g')
 PWD=$(pwd)
 FOLDERNAME=$(basename "$PWD")
 FILENAME="arduino-senseBoxCore-$VERSION.tar.bz2"
-OUTPUTNAME="packages/$FILENAME"
+OUTPUTFOLDER="packages"
+OUTPUTNAME="$OUTPUTFOLDER/$FILENAME"
 INPUTNAME=$(dirname "$PWD")
 
 # These variables hold references to the original Arduino boards package we are
@@ -41,6 +42,7 @@ ARDUINOBOARDPACKAGEVERSION="1.6.17"
 
 # wrap in functions to ensure script can be loaded correctly before executing anything
 createArchive () {
+  mkdir -p "$OUTPUTFOLDER"
   if [ -f "$OUTPUTNAME" ]; then
     echo "Error:"
     echo "File $OUTPUTNAME already exists. Please update the version in platform.txt to create a new version."
@@ -61,6 +63,12 @@ updatePackageJson () {
   echo -en "\tGetting toolsDependencies from upstream package ... "
 
   TOOLSDEPENDENCIES=$(curl --silent -L "$ARDUINOBOARDPACKAGEURL" | jq -rMc --arg name "$ARDUINOBOARDPACKAGENAME" --arg version "$ARDUINOBOARDPACKAGEVERSION" -f extras/extract_toolsDependencies.jq)
+
+  echo "done"
+
+  echo -en "\tGetting previous package_sensebox_index.json from gh-pages branch ... "
+
+  curl -o package_sensebox_index.json --silent -L "https://sensebox.github.io/arduino-senseBoxCore/package_sensebox_index.json"
 
   echo "done"
 
@@ -86,7 +94,25 @@ updatePackageJson () {
   echo "done"
 }
 
-# call the functions
-createArchive
-updatePackageJson
+commitAndTag () {
+  echo -n "Creating commit ... "
+  git commit -m "Release ${VERSION}"
+  echo "done"
 
+  echo -n "Creating new tag ${VERSION} ... "
+  git tag "${VERSION}"
+  echo "done"
+
+  echo ""
+  echo "Now run"
+  echo -e "\tgit push origin ${VERSION} master"
+}
+
+cmd=${1:-}
+
+if [[ -z "$cmd" ]]; then
+  createArchive
+  updatePackageJson
+else
+  eval "${cmd}"
+fi

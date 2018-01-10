@@ -1,3 +1,5 @@
 bootloaders/*/build/
 .vscode
 .idea
+packages
+package_sensebox_index.json

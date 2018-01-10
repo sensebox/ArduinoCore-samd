@@ -2,30 +2,28 @@ sudo: false
 env:
   global:
   - IDE_VERSION=1.8.5
-  - SENSEBOXCORE_URL=file:///${TRAVIS_BUILD_DIR}/package_sensebox_index.json
 before_script:
 - wget http://downloads.arduino.cc/arduino-$IDE_VERSION-linux64.tar.xz
 - tar xf arduino-$IDE_VERSION-linux64.tar.xz
 - mv arduino-$IDE_VERSION $HOME/arduino-ide
 - export PATH=$PATH:$HOME/arduino-ide
+- rm -rf arduino-$IDE_VERSION-linux64.tar.xz
 script:
+# Create archive and package_sensebox_index.json
 - "./extras/pack.release.bash"
-- mv package_sensebox_index.json package_sensebox_index.json_original
-- export SENSEBOXCORE_VERSION=$(grep version= platform.txt | sed 's/version=//g')
-- jq -rM --arg version "$SENSEBOXCORE_VERSION" --arg url "file://${TRAVIS_BUILD_DIR}/packages/arduino-senseBoxCore-${SENSEBOXCORE_VERSION}.tar.bz2"
-  -f extras/replace_local_url.jq package_sensebox_index.json_original > package_sensebox_index.json
-- arduino --pref boardsmanager.additional.urls=$SENSEBOXCORE_URL --install-boards
-  senseBox:samd:$SENSEBOXCORE_VERSION
-- arduino --verbose-build --verify --board senseBox:samd:sb "${TRAVIS_BUILD_DIR}/libraries/senseBox/examples/Blink/Blink.ino"
-before_deploy:
+- "./extras/test.release.bash"
+# Get the current version for deployment
+- SENSEBOXCORE_VERSION=$(grep version= platform.txt | sed 's/version=//g')
+# originall in in before_deploy, but this is ran before each deploy provider
+# so just do it once here..
 - mkdir -p deploy
 - mv package_sensebox_index.json_original deploy/package_sensebox_index.json
 deploy:
   - provider: releases
-    script: export SENSEBOXCORE_VERSION=$(grep version= platform.txt | sed 's/version=//g')
-    file: "${TRAVIS_BUILD_DIR}/packages/arduino-senseBoxCore-${SENSEBOXCORE_VERSION}.tar.bz2"
+    file: "packages/arduino-senseBoxCore-${SENSEBOXCORE_VERSION}.tar.bz2"
     api_key:
       secure: fBQh1gog1+IR6GwXC0nKjIvku4Mtme5EpVhdkO+LXz8sCy0di76otDtS/YQ5Gviw35bMst0++vJsFYwlw3ViuEv9NEk9rQ5DWBFc40UazrkXi09MmkfwNm40FXOHNwioeX79GTwhqFqNdK8C248t3/jICqHcf0GOMa8yr07VpLAsSXYKVAI4aVE/4Pe6ZsQ0eTpSgw/uUyVP0RUI68WACvJkrXj29Z56tt58v7nUPe6VMp3zROH2iZpPhpYNm8FmwOb19Ax8fSU6ei7/wX+cnfw5gLGh0j8/re/j6fHr6eSYUBXzF84/DFKi4EVmpThqPBtdM+rL4raAk5tvUD3pQBiclJ32EYjJKEmi0foFL0ZqkItZV6VGvdJGVcSul9XrqAHq1YxoSAoyWicrbV9QQFhMP812LCjHEqsBYUt2xKP2JYDkSrJmFQFX0emOTFIzBD6jyjC3aTpxR6QjwUFsv4SLU5ag9gLVUem5o4C16wzbWfJiT4/6FrCjH1RhdfqtTZnOPktDFMNyxru40TyDIWZSJx9npkS6wcDBbLeCj+duVvWIO7C2lvenxb1TVcn8BuIm0Ing2Qvq26dYQJeYo8xmSzTcQUNHUvUbCzxpoJvS5Cj1EIZgmjPL9V1l3TPJAzVsHt0dAF4OW/XJpOYSEHnw8UgKsiZUDcrbVAK0fS0=
+    skip_cleanup: true
     on:
       repo: sensebox/arduino-senseBoxCore
       branch: master
