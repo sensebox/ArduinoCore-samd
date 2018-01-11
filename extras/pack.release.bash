@@ -44,10 +44,9 @@ ARDUINOBOARDPACKAGEVERSION="1.6.17"
 createArchive () {
   mkdir -p "$OUTPUTFOLDER"
   if [ -f "$OUTPUTNAME" ]; then
-    echo "Error:"
-    echo "File $OUTPUTNAME already exists. Please update the version in platform.txt to create a new version."
-    echo "Exiting ..."
-    exit
+    BACKUPNAME="${OUTPUTNAME}_bckp"
+    echo "File ${OUTPUTNAME} already exists. Renaming to ${BACKUPNAME}"
+    mv "${OUTPUTNAME}" "${BACKUPNAME}"
   fi
 
   echo -n "Creating tar archive $OUTPUTNAME ... "
@@ -60,19 +59,30 @@ createArchive () {
 updatePackageJson () {
   echo "Updating package_sensebox_index.json ... "
 
-  echo -en "\tGetting toolsDependencies from upstream package ... "
+  echo -en "\\tGetting toolsDependencies from upstream package ... "
 
   TOOLSDEPENDENCIES=$(curl --silent -L "$ARDUINOBOARDPACKAGEURL" | jq -rMc --arg name "$ARDUINOBOARDPACKAGENAME" --arg version "$ARDUINOBOARDPACKAGEVERSION" -f extras/extract_toolsDependencies.jq)
 
   echo "done"
 
-  echo -en "\tGetting previous package_sensebox_index.json from gh-pages branch ... "
+  echo -en "\\tGetting previous package_sensebox_index.json from gh-pages branch ... "
 
   curl -o package_sensebox_index.json --silent -L "https://sensebox.github.io/arduino-senseBoxCore/package_sensebox_index.json"
 
   echo "done"
 
-  echo -en "\tConstructing new platform ... "
+  TRAVIS_IS_BUILDING_TAG=${TRAVIS_TAG:-}
+
+  if [[ -z "${TRAVIS_IS_BUILDING_TAG}" ]]; then
+    echo -en "\\t\\tRemoving version ${VERSION} from package_sensebox_index.json since this is not a new tag ... "
+
+    jq -rM --arg version "${VERSION}" -f extras/remove_currentPlatform.jq package_sensebox_index.json > new_package.json
+    mv new_package.json package_sensebox_index.json
+
+    echo "done"
+  fi
+
+  echo -en "\\tConstructing new platform ... "
 
   # get filesize
   FILESIZE=$(stat -c "%s" "$OUTPUTNAME")
@@ -84,7 +94,7 @@ updatePackageJson () {
 
   echo "done"
 
-  echo -en "\tConstructing updated package_sensebox_index.json ... "
+  echo -en "\\tConstructing updated package_sensebox_index.json ... "
 
   jq -rM --argjson newPlatform "$NEWPLATFORM" -f extras/update_package.jq package_sensebox_index.json > new_package.json
   mv new_package.json package_sensebox_index.json
@@ -105,7 +115,7 @@ commitAndTag () {
 
   echo ""
   echo "Now run"
-  echo -e "\tgit push origin ${VERSION} master"
+  echo -e "\\tgit push origin ${VERSION} master"
 }
 
 cmd=${1:-}
