@@ -1,4 +1,4 @@
-# senseBox MCU Arduino Core Board Support Package
+# senseBox MCU Arduino Core Board Support Package [![Build Status](https://travis-ci.org/sensebox/arduino-senseBoxCore.svg?branch=master)](https://travis-ci.org/sensebox/arduino-senseBoxCore)
 
 This repository contains the Board Support Package for the senseBox MCU required to compile Arduino sketches in [Arduino IDE v1.8+](https://www.arduino.cc/en/Main/Software).
 
