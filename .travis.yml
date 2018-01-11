@@ -32,7 +32,7 @@ deploy:
   - provider: pages
     github_token:
       secure: aPjPB1EqQqQt7UEzo/9Di35+hAl9ctfAoE8KCtEXsk0itUsN8DhSgJu1WX6xmo9r4xDayLCfxyVQepfU49d0McHRJYZCPN0pvHQMmWFs7/tzOB/MGGqxy5zkqdAx2Z52HrKQ9DjL8epHuImm8DzX60Nyyd6bTN7WDnZI/1lIWFvm7KxfLxyb3F76b/zjTln5QFNAnM52FIVNkSxjc0xEnNzabKEDXICQCrrb1nymqjbFx0tnbTcFWqVKu93VY31P91eNslB9dI1XDJGwUUH1ZaCNxUOFScD2mV7tHPl8XQWa3ew4P72CJDvdpvRa7Lx17ddLr5THtMxaxCUuXAsld+JZ1N60o4rTcxPmdNbp4lFp0isSkEgkfxyqRSaxQ4Ex8Vpp1fYPSfT4H4RDQUaKWzX21L89idynescT8sV1J/q0BQruDPM7cgbTr2WCP2w+claw74ZnHjdSr9awlNKS8S87OjeC4+nKBdrYoUaLKx+lwss1jcMqXY82x8zPIbEGWwFVqYmrLqYwJTUaHxCukCVBZZwt1deBeJjqnyqaGdzGZ25cGZAnAwZjBcXpdX226DuKBlD3fnwbxX9jguroNOqGYY3i/r+hJ6mo3IYcG/CgwOpVYWZKCLdYJEwki6TNSY8+7Op/txJwCl3nWqqVoX3qp7hC6NLPToHBAu0sgNM=
-    local_dir: ${TRAVIS_BUILD_DIR}/deploy
+    local_dir: deploy
     skip_cleanup: true
     on:
       repo: sensebox/arduino-senseBoxCore
