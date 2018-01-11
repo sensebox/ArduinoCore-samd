@@ -26,6 +26,15 @@ To install the core in your Arduino IDE:
 * [Schematics + Layout](https://github.com/watterott/SenseBox-MCU/tree/master/hardware) (External link)
 * [Board Support Package for Arduino IDE](https://github.com/sensebox/arduino-senseBoxCore/)
 
+## Try changes locally
+
+This only works on linx!
+
+1. `./extras/pack.release.bash`
+1. `./extras/test.release.bash prepareJson`
+1. If you have the current version already installed, delete the folder `~/.arduino15/packages/senseBox`
+1. Run `arduino --pref "boardsmanager.additional.urls=file:///home/your-user/arduino-senseBoxCore/package_sensebox_index.json" --install-boards "senseBox:samd:${VERSION}"`
+
 ## Releasing a new version
 
 Make sure there isn't already a release with this version on Github! The release provider will not overwrite the release but force push the json resulting in different crc values of the actual archive file and in the json!
